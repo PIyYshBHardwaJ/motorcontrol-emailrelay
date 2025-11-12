@@ -9,13 +9,14 @@ const RECEIVER_EMAIL = "piyushbhardwaj418@gmail.com";
 const SENDER_EMAIL = "onboarding@resend.dev"; // any valid sender
 
 app.post("/send-report", async (req, res) => {
-  const { name, date, time, forward, backward, total } = req.body;
+  const { name, email, date, time, forward, backward, total } = req.body;
 
   console.log("📨 Report received from ESP32:", req.body);
 
   const emailBody = `
     <h2>Motor Control Session Summary</h2>
     <p><b>Patient:</b> ${name}</p>
+    <p><b>Patient Email:</b> ${email}</p
     <p><b>Date:</b> ${date}</p>
     <p><b>Time:</b> ${time}</p>
     <p><b>Forward:</b> ${forward}</p>
