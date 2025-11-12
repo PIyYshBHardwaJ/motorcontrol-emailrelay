@@ -9,7 +9,7 @@ const RECEIVER_EMAIL = "piyushbhardwaj418@gmail.com";
 const SENDER_EMAIL = "onboarding@resend.dev"; // any valid sender
 
 app.post("/send-report", async (req, res) => {
-  const { name, email, date, time, forward, backward, total } = req.body;
+  const { name, email, date, time, clockwise, anticlockwise, total } = req.body;
 
   console.log("📨 Report received from ESP32:", req.body);
 
@@ -19,8 +19,8 @@ app.post("/send-report", async (req, res) => {
     <p><b>Patient Email:</b> ${email}</p
     <p><b>Date:</b> ${date}</p>
     <p><b>Time:</b> ${time}</p>
-    <p><b>Forward:</b> ${forward}</p>
-    <p><b>Backward:</b> ${backward}</p>
+    <p><b>clockwise:</b> ${clockwise}</p>
+    <p><b>anticlockwise:</b> ${anticlockwise}</p>
     <p><b>Total:</b> ${total} seconds</p>
   `;
 
