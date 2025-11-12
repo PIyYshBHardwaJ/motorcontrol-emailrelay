@@ -1,59 +1,74 @@
 import express from "express";
-import fetch from "node-fetch";
+import nodemailer from "nodemailer";
 
 const app = express();
 app.use(express.json());
 
-// ✅ Your EmailJS credentials
-const SERVICE_ID = "service_gq8aexf";
-const TEMPLATE_ID = "template_fl6jrta";
-const PRIVATE_KEY = "Ih-q0LCJBs-O0ENmwDM0s"; // private key from EmailJS
+// ✅ Fixed Gmail credentials (sender)
+const SENDER_EMAIL = "piyush.pb.2005@gmail.com";           // your Gmail
+const SENDER_PASS = "qzvc dnqv ednt zcyt";              // app password from Google
 
-// ✅ Root route for status check
+// ✅ Fixed recipient email (who receives all reports)
+const RECEIVER_EMAIL = "piyushbhardwaj418@gmail.com";            // doctor or clinic Gmail
+
+// ✅ Root check route
 app.get("/", (req, res) => {
-  res.send("✅ MotorControl Email Relay Server is running and ready to send emails.");
+  res.send("✅ Gmail Relay Server is running and ready.");
 });
 
-// ✅ API route for ESP32
+// ✅ ESP32 endpoint
 app.post("/send-report", async (req, res) => {
-  const { name, email, date, time, forward, backward, total } = req.body;
+  const { name, date, time, forward, backward, total } = req.body;
 
-  if (!name || !email) {
+  if (!name || !date || !time) {
     return res.status(400).send("Missing required fields");
   }
 
-  console.log("📨 Email request received from ESP32:", req.body);
+  console.log("📨 Report received from ESP32:", req.body);
 
   try {
-    // ✅ Correct endpoint for both public or private key
-    const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        service_id: SERVICE_ID,
-        template_id: TEMPLATE_ID,
-        accessToken: PRIVATE_KEY, // 👈 correct field for private key
-        template_params: {
-          name,
-          email,
-          date,
-          time,
-          forward,
-          backward,
-          total,
-        },
-      }),
+    // 🔧 Create transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: SENDER_EMAIL,
+        pass: SENDER_PASS,
+      },
     });
 
-    const text = await response.text();
-    console.log("✅ EmailJS Response:", response.status, text);
-    res.status(response.status).send(text);
+    // 📨 Email content
+    const mailOptions = {
+      from: `"Motor Control System" <${SENDER_EMAIL}>`,
+      to: RECEIVER_EMAIL,
+      subject: `Patient Session Report - ${name}`,
+      html: `
+        <div style="font-family:Arial,sans-serif; padding:15px; background:#f9f9f9;">
+          <h2 style="color:#007bff;">Motor Control Session Summary</h2>
+          <p><b>Patient Name:</b> ${name}</p>
+          <p><b>Date:</b> ${date}</p>
+          <p><b>Time:</b> ${time}</p>
+          <p><b>Forward Turns:</b> ${forward}</p>
+          <p><b>Backward Turns:</b> ${backward}</p>
+          <p><b>Total Duration:</b> ${total} seconds</p>
+          <hr style="margin:15px 0;"/>
+          <p style="font-size:13px; color:#555;">
+            Sent automatically by the ESP32 Motor Control System 🦾
+          </p>
+        </div>
+      `,
+    };
+
+    // 🚀 Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent:", info.response);
+
+    res.status(200).send("✅ Email sent successfully via Gmail");
   } catch (err) {
-    console.error("❌ Error sending email:", err);
-    res.status(500).send("Server error");
+    console.error("❌ Failed to send email:", err);
+    res.status(500).send("Email send failed: " + err.message);
   }
 });
 
-// ✅ Start the server
+// ✅ Start server
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Gmail relay running on port ${PORT}`));
