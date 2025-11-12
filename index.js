@@ -26,7 +26,7 @@ app.post("/send-report", async (req, res) => {
   console.log(req.body);
 
   try {
-    const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    const response = await fetch("https://api.emailjs.com/api/v1.0/email/send-private", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
