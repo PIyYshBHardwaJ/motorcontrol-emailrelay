@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 // ✅ Replace these values accordingly
-const RESEND_API_KEY = "re_GD94N3Fn_DTpASLuydz2SRhZvC4U9qNag";
+const RESEND_API_KEY = "re_Y1H69ssa_JLp5gtKpAurAUeoTdNSZ44xo";
 const RECEIVER_EMAIL = "unhardik@gmail.com";
 const SENDER_EMAIL = "onboarding@resend.dev"; // any verified sender email
 
