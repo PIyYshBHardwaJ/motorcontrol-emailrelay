@@ -6,7 +6,7 @@ app.use(express.json());
 
 const RESEND_API_KEY = "re_GD94N3Fn_DTpASLuydz2SRhZvC4U9qNag";
 const RECEIVER_EMAIL = "piyushbhardwaj418@gmail.com";
-const SENDER_EMAIL = "piyush.pb.2005@gmail.comn"; // any valid sender
+const SENDER_EMAIL = "onboarding@resend.dev"; // any valid sender
 
 app.post("/send-report", async (req, res) => {
   const { name, date, time, forward, backward, total } = req.body;
