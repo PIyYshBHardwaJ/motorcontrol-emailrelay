@@ -59,15 +59,20 @@ app.post("/send-report", async (req, res) => {
     };
 
     // 🚀 Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent:", info.response);
+    // 🚀 Send email asynchronously (non-blocking)
+    // 🚀 Send email asynchronously (non-blocking)
+    transporter.sendMail(mailOptions)
+      .then(info => console.log("✅ Email sent:", info.response))
+      .catch(err => console.error("❌ Failed to send email:", err));
 
-    res.status(200).send("✅ Email sent successfully via Gmail");
-  } catch (err) {
-    console.error("❌ Failed to send email:", err);
-    res.status(500).send("Email send failed: " + err.message);
+    // ⚡ Respond instantly to ESP32
+    res.status(200).send("✅ Report received. Email will be sent shortly.");
+  } catch (error) {
+    console.error("❌ Server error:", error);
+    res.status(500).send("Internal server error");
   }
-});
+});  // <-- closes app.post("/send-report", ...)
+
 
 // ✅ Start server
 const PORT = process.env.PORT || 10000;
