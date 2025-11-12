@@ -8,8 +8,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-  "express": "^4.19.2",
-  "nodemailer": "^6.9.15"
-}
-
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.15"
+  }
 }
