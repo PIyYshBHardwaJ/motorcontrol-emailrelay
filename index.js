@@ -12,7 +12,7 @@ const SENDER_EMAIL = "onboarding@resend.dev"; // any verified sender email
 
 // 📩 Route to receive ESP32 report and send email
 app.post("/send-report", async (req, res) => {
-  const { name, email, date, time, clockwise, anticlockwise, total, expansion } = req.body;
+  const { name, email, date, time, contraction, expansion, total, expansion } = req.body;
 
   console.log("📨 Report received from ESP32:", req.body);
 
@@ -23,8 +23,8 @@ app.post("/send-report", async (req, res) => {
     <p><b>Patient Email:</b> ${email}</p>
     <p><b>Date:</b> ${date}</p>
     <p><b>Time:</b> ${time}</p>
-    <p><b>Clockwise Turns:</b> ${clockwise}</p>
-    <p><b>Anticlockwise Turns:</b> ${anticlockwise}</p>
+    <p><b>Contraction Turns:</b> ${contraction}</p>
+    <p><b>Expansion Turns:</b> ${expansion}</p>
     <p><b>Total Time:</b> ${total} seconds</p>
     <p><b>Expansion:</b> ${expansion} mm</p>
   `;
